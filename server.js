@@ -19,20 +19,18 @@ app.use(morgan("dev"));
 
 app.use(cors());
 
+//api end point
+app.use("/api", bookRoutes);
+
+
 app.use(express.static(path.join(__dirname, "./client/build")));
 
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-//api end point
-app.use("/api", bookRoutes);
 
-app.get("/", (req, res) => {
-  res.send({
-    message: "LMS Website",
-  });
-});
+
 
 const PORT = process.env.PORT || 8080;
 
