@@ -5,11 +5,15 @@ import colors from "colors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import bookRoutes from "./routes/bookRoute.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const path = require("path");
 dotenv.config();
 
 connectDB();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -19,18 +23,14 @@ app.use(morgan("dev"));
 
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, "./client/build")));
+
 //api end point
 app.use("/api", bookRoutes);
 
-
-app.use(express.static(path.join(__dirname, "./client/build")));
-
-app.get("*", function (req, res) {
+app.use("*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
-
-
-
 
 const PORT = process.env.PORT || 8080;
 
